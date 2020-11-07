@@ -1,16 +1,19 @@
-# This is a sample Python script.
+import speech_recognition as sr
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def test_microfone():
+    mic = sr.Microphone(device_index=1)
+    recog = sr.Recognizer()
+    while True:
+        with mic as audio_file:
+            print('Speech to microphone')
+            audio = recog.listen(source=audio_file,phrase_time_limit=10)
 
+            print("Converting Speech to Text...")
+            text_from_speech = recog.recognize_sphinx(audio_data=audio, language='ru-RU')
+            print("You said: " + text_from_speech)
+            if text_from_speech == "выйти":
+                print('Exit from speech-to-text program')
+                break
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    test_microfone()
