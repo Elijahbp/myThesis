@@ -8,7 +8,6 @@ def test_microphone():
         with mic as audio_file:
             print('Speech to microphone')
             audio = recog.listen(source=audio_file,phrase_time_limit=10)
-
             print("Converting Speech to Text...")
             text_from_speech = recog.recognize_sphinx(audio_data=audio, language='ru-RU')
             print("You said: " + text_from_speech)
@@ -71,3 +70,5 @@ if __name__ == '__main__':
         k = input()
         if k != "exit":
             stt.say(k)
+        else:
+            break
