@@ -1,4 +1,5 @@
 import speech_recognition as sr
+import pyttsx3
 
 def test_microphone():
     mic = sr.Microphone(device_index=1)
@@ -23,7 +24,6 @@ class RecognationModule():
         self.recognizer = sr.Recognizer()
         self.recognizer_method = recognizer_method
 
-
     def get_outputdata(self):
         audio = self.listen()
         text_from_speech = self.start_recognize(audio=audio)
@@ -35,7 +35,6 @@ class RecognationModule():
             print('Speech to microphone')
             audio = self.recognizer.listen(source=audio_file,phrase_time_limit=10)
             return audio
-
 
     def start_recognize(self,audio):
         print("Converting Speech to Text...")
@@ -50,5 +49,25 @@ class RecognationModule():
         return text_from_speech
 
 
+class SpeechToTextModule():
+    def __init__(self):
+        self.engine = pyttsx3.init()
+        self.engine.setProperty('male', 'male')
+        self.engine.setProperty('rate',150)
+        self.engine.setProperty('volume',0.9)
+
+
+
+    def say(self,msg:str):
+        self.engine.say(msg)
+        self.engine.runAndWait()
+
+
+
 if __name__ == '__main__':
-    test_microphone()
+    #test_microphone()
+    stt = SpeechToTextModule()
+    while True:
+        k = input()
+        if k != "exit":
+            stt.say(k)
