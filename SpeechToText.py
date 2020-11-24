@@ -7,7 +7,7 @@ class SpeechToTextModule():
         self.recognizer = sr.Recognizer()
         self.recognizer_method = recognizer_method
 
-    def get_outputdata(self):
+    def get_textfromspeesh(self):
         audio = self.listen()
         text_from_speech = self.start_recognize(audio=audio)
         return text_from_speech
