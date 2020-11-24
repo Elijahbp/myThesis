@@ -1,22 +1,6 @@
 import speech_recognition as sr
-import pyttsx3
 
-def test_microphone():
-    mic = sr.Microphone(device_index=1)
-    recog = sr.Recognizer()
-    while True:
-        with mic as audio_file:
-            print('Speech to microphone')
-            audio = recog.listen(source=audio_file,phrase_time_limit=10)
-            print("Converting Speech to Text...")
-            text_from_speech = recog.recognize_sphinx(audio_data=audio, language='ru-RU')
-            print("You said: " + text_from_speech)
-            if text_from_speech == "выйти":
-                print('Exit from speech-to-text program')
-
-
-
-class RecognationModule():
+class SpeechToText():
     def __init__(self, index_microphone = 1, recognizer_method ='sphinx', language ='ru-RU'):
         self.index_microphone = index_microphone
         self.language = language
@@ -43,32 +27,6 @@ class RecognationModule():
         elif self.recognizer_method == 'google':  # необходима настройка
             text_from_speech = self.recognizer.recognize_google(audio_data=audio,key = None,language='ru-RU')
         elif self.recognizer_method == 'houndify':  # необходима настройка
-            text_from_speech = self.recognizer.recognize_houndify(audio_data=audio,client_id='',client_key='')
+            text_from_speech = self.recognizer.recognize_houndify(audio_data=audio,client_id='wDZNQouAcQolOXkEx7K_6A==',client_key='VHBYNcRARVn4zZtFi0jOKp3AqB3wqMRPu7u34sfu5dZRaAMJl53fPHHFhp-z2kkN9uPrATQNQBA2d1K4WntTug==')
         print("You said: " + text_from_speech)
         return text_from_speech
-
-
-class SpeechToTextModule():
-    def __init__(self):
-        self.engine = pyttsx3.init()
-        self.engine.setProperty('male', 'male')
-        self.engine.setProperty('rate',150)
-        self.engine.setProperty('volume',0.9)
-
-
-
-    def say(self,msg:str):
-        self.engine.say(msg)
-        self.engine.runAndWait()
-
-
-
-if __name__ == '__main__':
-    #test_microphone()
-    stt = SpeechToTextModule()
-    while True:
-        k = input()
-        if k != "exit":
-            stt.say(k)
-        else:
-            break
