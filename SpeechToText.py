@@ -1,6 +1,6 @@
 import speech_recognition as sr
 
-class SpeechToTextModule():
+class SpeechToTextModule:
     def __init__(self, index_microphone = 1, recognizer_method ='sphinx', language ='ru-RU'):
         self.index_microphone = index_microphone
         self.language = language
