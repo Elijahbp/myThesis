@@ -2,11 +2,13 @@ from datetime import datetime
 
 from SpeechToText import SpeechToTextModule
 from TextToSpeech import TextToSpeechModule
-
 from ManagerModules import ManagerModules
+from StringDateAndTime import *
+
 import json
 
 STOP_ASSISTANT = 1
+
 
 class Core:
     def __init__(self):
@@ -15,30 +17,43 @@ class Core:
         self.manager_modules = ManagerModules(tts=self.tts)
         self.main_commands = {}
         self.manager_modules_commands = {}
+        self.pool_commands = {"core": None,
+                              "manager": None}  # пул комманд, для быстрого определения, куда необходимо передавать команды
+        self.load_commands()
+
+    def load_commands(self):
         with open('./src/main_commands.json', encoding='utf-8') as main_commands:
             loaded_json = json.load(main_commands)
             self.main_commands = loaded_json['сommands_main']
             self.manager_modules_commands = loaded_json['сommands_module_manager']
+            main_commands.close()
+        self.pool_commands['core'] = ','.join(self.main_commands.values())
+        self.pool_commands['manager'] = ','.join(self.manager_modules_commands.values())
 
     def run(self):
         # Запуск
         self.tts.say('Инициализация произведена')
-        # TODO: Сделать проверку на загружаемые модули
-        work = True
-        while True:
-            #input_text = self.stt.get_textfromspeesh()
+        run = True
+        while run:
+            # input_text = self.stt.get_textfromspeesh()
             input_text = input()
             result = self.command_analyzer(input_text)
             if result == STOP_ASSISTANT:
-                return None
+                run = False
+                continue
+        self.tts.say("Lol kek chebureck")
 
     def command_analyzer(self, input_command: str):
         # Todo: Подумать, может сделать общий пул комманд для увеличения скорости работы? Для этого будет
         #  производится поиск из всех комманд, и комманды будут содержать спец атрибут, отсылающий к типам команды:
         #  main/manager/module и сразу же будет происходить перенаправление xD
-        for id,words in self.main_commands.items():
+
+        # 1) Формируем пул из всех команд
+        # 2)
+        for id, words in self.main_commands.items():
             if input_command in words:
                 return self.run_main_command(int(id))
+
         return
 
     def run_main_command(self, id_command: int):
@@ -49,12 +64,13 @@ class Core:
             return STOP_ASSISTANT
         elif id_command == 2:
             # Вывод времени минуты/секунды
-            time = datetime.now()
-            str_time = f"{time.hour} часа {time.minute} минут"
+            #time = datetime.now()
+            time = datetime(2020,6,3,2,22)
+            str_time = f"{get_hour_str(time.hour)} {get_minute_str(time.minute)}"
             self.tts.say(str_time)
         elif id_command == 3:
             # Вывод дня/месяца/года
             date = datetime.now()
-            str_date = f"Сегодня {date.day} {datetime.strftime(date, '%B')} {date.year} года"
+            str_date = f"Сегодня {date.day} {get_month_gen(date.month)} {date.year} года"
             self.tts.say(str_date)
         return None
