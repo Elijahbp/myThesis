@@ -8,7 +8,7 @@ HOURS_IN_TEXT = {
     "часов":[0,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
     "часа":[2,3,4,22,23,24]
 }
-MINUTE = "минута"
+MINUTE = "минут"
 
 MONTHS = [
  'январь',
@@ -28,10 +28,10 @@ MONTHS = [
 def get_minute_str(minute:int):
     str_minute = num2words(minute,lang="ru",to="cardinal")
     ending = morph.parse(MINUTE)[0]
-    buf = str.split(str_minute,' ')
+    buf = str.split(str_minute, ' ')
     #
     end_word_minute = morph.parse(buf[-1])[0]
-    end_word_minute = end_word_minute.inflect({'femn'})
+    #end_word_minute = end_word_minute.inflect({'femn'})
     if end_word_minute.tag.number:
         ending = ending.inflect({'gent'})
 

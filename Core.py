@@ -14,21 +14,16 @@ class Core:
     def __init__(self):
         self.stt = SpeechToTextModule(recognizer_method='houndify')
         self.tts = TextToSpeechModule()
-        self.manager_modules = ManagerModules(tts=self.tts)
         self.main_commands = {}
-        self.manager_modules_commands = {}
-        self.pool_commands = {"core": None,
-                              "manager": None}  # пул комманд, для быстрого определения, куда необходимо передавать команды
+        self.manager_modules = ManagerModules(stt=self.stt, tts=self.tts)
         self.load_commands()
 
     def load_commands(self):
         with open('./src/main_commands.json', encoding='utf-8') as main_commands:
             loaded_json = json.load(main_commands)
             self.main_commands = loaded_json['сommands_main']
-            self.manager_modules_commands = loaded_json['сommands_module_manager']
+            self.manager_modules.manager_modules_commands = loaded_json['сommands_module_manager']
             main_commands.close()
-        self.pool_commands['core'] = ','.join(self.main_commands.values())
-        self.pool_commands['manager'] = ','.join(self.manager_modules_commands.values())
 
     def run(self):
         # Запуск
@@ -53,7 +48,7 @@ class Core:
         for id, words in self.main_commands.items():
             if input_command in words:
                 return self.run_main_command(int(id))
-
+        self.manager_modules.command_analyzer(input_command)
         return
 
     def run_main_command(self, id_command: int):
@@ -64,8 +59,8 @@ class Core:
             return STOP_ASSISTANT
         elif id_command == 2:
             # Вывод времени минуты/секунды
-            #time = datetime.now()
-            time = datetime(2020,6,3,2,22)
+            time = datetime.now()
+            #time = datetime(2020,6,3,2,22)
             str_time = f"{get_hour_str(time.hour)} {get_minute_str(time.minute)}"
             self.tts.say(str_time)
         elif id_command == 3:
