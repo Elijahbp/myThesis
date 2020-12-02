@@ -37,7 +37,7 @@ def get_minute_str(minute:int):
 
     if end_word_minute:
         if len(buf) > 1:
-            str_minute = buf[0] +" "+end_word_minute.word
+            str_minute = buf[0] + " " + end_word_minute.word
         else:
             str_minute = end_word_minute.word
 
@@ -58,12 +58,12 @@ def get_month_num(month):
     return mapping.get(month_norm)
 
 def get_month_name(month):
-    if isinstance(month, int) and 1<= month <= 12:
+    if isinstance(month, int) and 1 <= month <= 12:
         return MONTHS[month-1]
     return None
 
 def get_month_soon(month):
-    if isinstance(month, int) and 1<= month <= 12:
+    if isinstance(month, int) and 1 <= month <= 12:
         month = MONTHS[month-1]
     p = morph.parse(month)[0]
     if p:
@@ -73,7 +73,7 @@ def get_month_soon(month):
     return None
 
 def get_month_gen(month):
-    if isinstance(month, int) and 1<= month <= 12:
+    if isinstance(month, int) and 1 <= month <= 12:
         month = MONTHS[month-1]
     p = morph.parse(month)[0]
     if p:

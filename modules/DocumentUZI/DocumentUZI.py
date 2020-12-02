@@ -1,17 +1,23 @@
-from TextToSpeech import TextToSpeechModule
-from SpeechToText import SpeechToTextModule
-
 import json
 
-class DocumentUZI:
+from src.TextToSpeech import TextToSpeechModule
+from src.SpeechToText import SpeechToTextModule
+from src.ParentClasses import ParentClassForModules
 
-    def __init__(self, stt: SpeechToTextModule, tts: TextToSpeechModule):
-        self.stt = stt
-        self.tts = tts
-        self.commands = ()
+
+class DocumentUZI(ParentClassForModules):
+
+    def __init__(self, name: str, stt: SpeechToTextModule, tts: TextToSpeechModule):
+        super().__init__(name=name,stt=stt, tts=tts)
+        self.load_commands()
 
     def load_commands(self):
-        with open('DocumentUZI_commands.json', encoding='utf-8') as commands:
-            #Получаем модули и пути к ним
-            self.commands =json.load(commands)
+        path = './modules/'+self.name+'/'+self.name + '_commands.json'
+        with open(path, encoding='utf-8') as commands:
+            # Получаем модули и пути к ним
+            self.commands = json.load(commands)
             commands.close()
+
+
+def init(name: str, stt: SpeechToTextModule, tts: TextToSpeechModule):
+    return DocumentUZI(name=name, stt=stt, tts=tts)

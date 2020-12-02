@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from SpeechToText import SpeechToTextModule
-from TextToSpeech import TextToSpeechModule
+from src.SpeechToText import SpeechToTextModule
+from src.TextToSpeech import TextToSpeechModule
 from ManagerModules import ManagerModules
-from StringDateAndTime import *
+from src.lib.StringDateAndTime import *
 
 import json
 
@@ -19,7 +19,7 @@ class Core:
         self.load_commands()
 
     def load_commands(self):
-        with open('./src/main_commands.json', encoding='utf-8') as main_commands:
+        with open('resources/main_commands.json', encoding='utf-8') as main_commands:
             loaded_json = json.load(main_commands)
             self.main_commands = loaded_json['сommands_main']
             self.manager_modules.manager_modules_commands = loaded_json['сommands_module_manager']
