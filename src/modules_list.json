@@ -1,5 +1,5 @@
 {
   "modules": {
-    "DocumentUZI": "./modules/DocumentUZI.py"
+    "DocumentUZI": "./modules/DocumentUZI/DocumentUZI.py"
   }
 }

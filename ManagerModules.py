@@ -4,6 +4,7 @@ import json
 from TextToSpeech import TextToSpeechModule
 from SpeechToText import SpeechToTextModule
 
+from modules.DocumentUZI.DocumentUZI import DocumentUZI
 class ManagerModules:
     # Менеджер модулей
     # Отвечает за инициализацию модулей. Для этого определяется файлы
@@ -21,7 +22,7 @@ class ManagerModules:
             modules_path = json.load(modules_json)
             for name,path in modules_path['modules'].items():
                 #Инициируем модули
-                #self.modules[name] = __import__(name=)
+                self.modules[name] = __import__(name='modules.DocumentUZI.DocumentUZI')
 
                 self.tts.say('Модуль '+name+ ' - инизиализирован!')
 
