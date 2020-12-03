@@ -8,11 +8,13 @@ class SpeechToTextModule:
         self.recognizer_method = recognizer_method
 
     def get_textfromspeesh(self):
+        """Получение транскрибации текста (внешняя функция для вызова)"""
         audio = self.listen()
         text_from_speech = self.start_recognize(audio=audio)
         return text_from_speech
 
     def listen(self):
+        """Прослушивание микрофона"""
         mic = sr.Microphone(device_index=self.index_microphone)
         with mic as audio_file:
             print('Speech to microphone')
@@ -20,6 +22,7 @@ class SpeechToTextModule:
             return audio
 
     def start_recognize(self,audio):
+        """Функция транскрибации голоса (перевода речи в текст)"""
         print("Converting Speech to Text...")
         text_from_speech = ''
         if self.recognizer_method == 'sphinx':

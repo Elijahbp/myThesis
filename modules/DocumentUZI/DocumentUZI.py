@@ -7,8 +7,11 @@ from src.ParentClasses import ParentClassForModules
 
 class DocumentUZI(ParentClassForModules):
 
-    def __init__(self, name: str, stt: SpeechToTextModule, tts: TextToSpeechModule):
-        super().__init__(name=name,stt=stt, tts=tts)
+
+
+    def __init__(self, stt: SpeechToTextModule, tts: TextToSpeechModule):
+        NAME_MODULE = 'DocumentUZI'
+        super().__init__(name=NAME_MODULE, stt=stt, tts=tts)
         self.load_commands()
 
     def load_commands(self):
@@ -18,6 +21,13 @@ class DocumentUZI(ParentClassForModules):
             self.commands = json.load(commands)
             commands.close()
 
+    def command_analyzer(self,command: str):
+        # Производится проверка на наличие соответствующей команды. Есои она присутствует, производится вызов нужной
+        #   функции.
+        if command in self.commands.values():
+            return command
 
-def init(name: str, stt: SpeechToTextModule, tts: TextToSpeechModule):
-    return DocumentUZI(name=name, stt=stt, tts=tts)
+
+def init(stt: SpeechToTextModule, tts: TextToSpeechModule):
+    """Внеший метод инициализации для динамического подключения модуля"""
+    return DocumentUZI(stt=stt, tts=tts)

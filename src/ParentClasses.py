@@ -11,3 +11,4 @@ class ParentClassForModules():
         self.tts = tts
         self.commands = {}
 
+    #обязательные методы! - init, stop
