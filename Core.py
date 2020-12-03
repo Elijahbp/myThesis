@@ -11,6 +11,7 @@ STOP_ASSISTANT = 1
 
 
 class Core:
+    #TODO - добавит ли свои исключения в работе?
     def __init__(self):
         self.stt = SpeechToTextModule(recognizer_method='houndify')
         self.tts = TextToSpeechModule()
@@ -48,11 +49,12 @@ class Core:
         for id, words in self.commands.items():
             if input_command in words:
                 return self.run_main_command(int(id))
-        #Если команда обращена не к ядру, проверяем на её исполнение в менеджере
+        #Если команда обращена не к ядру, передаем её на исполнение в менеджере
         self.manager_modules.command_analyzer(input_command)
         return
 
     def run_main_command(self, id_command: int):
+        #TODO - расширить функциональность
         """Обработчик команд ядра"""
         # При изменении списка команд - обязательно редактировать и эту функцию!!!
         if id_command == 1:
@@ -62,7 +64,6 @@ class Core:
         elif id_command == 2:
             # Вывод времени минуты/секунды
             time = datetime.now()
-            # time = datetime(2020,6,3,2,22)
             str_time = f"{get_hour_str(time.hour)} {get_minute_str(time.minute)}"
             self.tts.say(str_time)
         elif id_command == 3:
