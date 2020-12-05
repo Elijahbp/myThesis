@@ -11,7 +11,7 @@ STOP_ASSISTANT = 1
 
 
 class Core:
-    #TODO - добавит ли свои исключения в работе?
+    #TODO - добавить ли свои исключения в работе?
     def __init__(self):
         self.stt = SpeechToTextModule(recognizer_method='houndify')
         self.tts = TextToSpeechModule()
@@ -45,7 +45,6 @@ class Core:
         # Todo: Подумать, может сделать общий пул комманд для увеличения скорости работы? Для этого будет
         #  производится поиск из всех комманд, и комманды будут содержать спец атрибут, отсылающий к типам команды:
         #  main/manager/module и сразу же будет происходить перенаправление xD
-
         for id, words in self.commands.items():
             if input_command in words:
                 return self.run_main_command(int(id))

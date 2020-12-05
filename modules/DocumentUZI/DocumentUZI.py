@@ -10,6 +10,8 @@ class DocumentUZI(ParentClassForModules):
     def __init__(self, stt: SpeechToTextModule, tts: TextToSpeechModule):
         name_module = 'DocumentUZI'
         super().__init__(name=name_module, stt=stt, tts=tts)
+        self.info_str['name_ru'] = "Документы УЗИ"
+        self.info_str['version'] = "0.1"
         self.load_commands()
 
     def load_commands(self):
@@ -26,6 +28,10 @@ class DocumentUZI(ParentClassForModules):
         if command in self.commands.values():
             return command
 
+
+    def run_command(self, id: int):
+        return True
+
     def start(self):
         #TODO - реализовать
         return True
@@ -35,9 +41,7 @@ class DocumentUZI(ParentClassForModules):
         """Остановка модуля DocumentUZI"""
         return True
 
-    def info(self) -> str:
-        #TODO - реализовать
-        return "info DocumentUZI"
+
 def init(stt: SpeechToTextModule, tts: TextToSpeechModule):
     """Внеший метод инициализации для динамического подключения модуля"""
     return DocumentUZI(stt=stt, tts=tts)

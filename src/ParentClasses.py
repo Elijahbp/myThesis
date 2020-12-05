@@ -13,6 +13,18 @@ class ParentClassForModules():
         self.stt = stt
         self.tts = tts
         self.commands = {}
+        self.info_str = {
+            'name_ru':'',
+            'version':'',
+        }
+
+    @abstractmethod
+    def command_analyzer(self, command: str):
+        pass
+
+    @abstractmethod
+    def run_command(self, id: int):
+        pass
 
     @abstractmethod
     def start(self):
@@ -22,6 +34,7 @@ class ParentClassForModules():
     def stop(self):
         pass
 
-    @abstractmethod
     def info(self) -> str:
-        pass
+        output_info = "Модуль: " + self.info_str['name_ru'] + " Версия: " + self.info_str['version']
+        #self.tts.say(output_info)
+        return output_info
