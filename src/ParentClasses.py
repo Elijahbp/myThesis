@@ -23,7 +23,7 @@ class ParentClassForModules():
         pass
 
     @abstractmethod
-    def run_command(self, id: int):
+    def run_command(self, id: int, **kwargs):
         pass
 
     @abstractmethod

@@ -26,14 +26,19 @@ class DocumentUZI(ParentClassForModules):
         # Производится проверка на наличие соответствующей команды. Есои она присутствует, производится вызов нужной
         #   функции.
         if command in self.commands.values():
-            return command
+            for key, words in self.commands.items():
+                if command in words:
+                    return self.run_command(int(key))
+        else:
+            None
 
-
-    def run_command(self, id: int):
+    def run_command(self, id: int, **kwargs):
+        #TODO - провести разбор выполняемых команд
         return True
 
     def start(self):
         #TODO - реализовать
+
         return True
 
     def stop(self):

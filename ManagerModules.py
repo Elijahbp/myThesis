@@ -43,16 +43,19 @@ class ManagerModules(ParentClassForModules):
 
             modules_json.close()
 
-    def command_analyzer(self, input_command: str):
+    def command_analyzer(self, command: str):
         # 1) Проверка на команду менеджера
         # 2) Проверка на команду запущенных модуля (потом реализовать в модуле???)
         for id, words in self.commands.items():
-            if input_command in words:
-                self.run_manager_command(id=int(id))
+            if command in words:
+                self.run_command(id=int(id))
                 return True
+        for name_module, structure in self.modules.items():
+            if structure['status'] == STATUS_WORK['started']:
+                structure['module'].command_analyzer(command= command)
         return
 
-    def run_manager_command(self, id: int, **kwargs):
+    def run_command(self, id: int, **kwargs):
         kwargs = {'name_module': 'DocumentUZI'}
         if id == 1:
             # Запуск модуля с определенным имененем
@@ -85,6 +88,7 @@ class ManagerModules(ParentClassForModules):
         result = self.modules[name_module]['module'].stop()
         if result:
             self.tts.say('Выполнено')
+            #TODO - Очищать ли из памяти объект модуля?
             self.modules[name_module]['status'] = STATUS_WORK['stopped']
             return True
         else:
