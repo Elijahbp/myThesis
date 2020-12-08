@@ -43,13 +43,16 @@ class ManagerModules(ParentClassForModules):
 
             modules_json.close()
 
-    def command_analyzer(self, input_command: str):
+    def command_analyzer(self, command: str):
         # 1) Проверка на команду менеджера
         # 2) Проверка на команду запущенных модуля (потом реализовать в модуле???)
         for id, words in self.commands.items():
-            if input_command in words:
+            if command in words:
                 self.run_manager_command(id=int(id))
                 return True
+        for name_module, structure in self.modules.items():
+            if structure['status'] == STATUS_WORK['started']:
+                structure['module'].command_analyzer(command= command)
         return
 
     def run_manager_command(self, id: int, **kwargs):
