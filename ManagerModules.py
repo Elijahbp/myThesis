@@ -26,6 +26,9 @@ class ManagerModules(ParentClassForModules):
         # 'module':obj,
         # 'status':STATUS_WORK}}
         self.search_modules()
+        self.pool_all_commands_modules = {
+            self: ','.join(self.commands.keys()),
+        }
 
     def search_modules(self):
         """Поиск модулей на подключение"""
@@ -43,19 +46,16 @@ class ManagerModules(ParentClassForModules):
 
             modules_json.close()
 
-    def command_analyzer(self, command: str):
+    def command_analyzer(self, input_command: str):
         # 1) Проверка на команду менеджера
         # 2) Проверка на команду запущенных модуля (потом реализовать в модуле???)
-        for id, words in self.commands.items():
-            if command in words:
-                self.run_command(id=int(id))
-                return True
-        for name_module, structure in self.modules.items():
-            if structure['status'] == STATUS_WORK['started']:
-                structure['module'].command_analyzer(command= command)
+        #TODO: ПРОДОЛЖИТЬ С ЭТОГО МОМЕНТА!
+        command_data = []
+        command_data = input_command.split(',')
+        #for key_words, structure_command in self.commands.items():
         return
 
-    def run_command(self, id: int, **kwargs):
+    def run_command(self, structure: dict, args):
         kwargs = {'name_module': 'DocumentUZI'}
         if id == 1:
             # Запуск модуля с определенным имененем
@@ -73,10 +73,11 @@ class ManagerModules(ParentClassForModules):
     def start_module(self, name_module):
         self.tts.say('Запуск модуля ' + name_module)
         class_module = self.modules[name_module]['class']
-        self.modules[name_module]['module'] = class_module(stt=self.stt, tts=self.tts)
-        result = self.modules[name_module]['module'].start()
+        module_obj = self.modules[name_module]['module'] = class_module(stt=self.stt, tts=self.tts)
+        result = module_obj.start()
         if result:
             self.modules[name_module]['status'] = STATUS_WORK['started']
+            self.pool_all_commands_modules[module_obj] = ','.join(module_obj.commands.keys())
             self.tts.say('Модуль ' + name_module + ' - запущен!')
             return True
         else:
@@ -90,6 +91,7 @@ class ManagerModules(ParentClassForModules):
             self.tts.say('Выполнено')
             #TODO - Очищать ли из памяти объект модуля?
             self.modules[name_module]['status'] = STATUS_WORK['stopped']
+            del self.pool_all_commands_modules[self.modules[name_module]['module']]
             return True
         else:
             return False

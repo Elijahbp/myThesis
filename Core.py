@@ -2,6 +2,7 @@ from datetime import datetime
 
 from src.SpeechToText import SpeechToTextModule
 from src.TextToSpeech import TextToSpeechModule
+from src.ParentClasses import ParentClassForModules
 from ManagerModules import ManagerModules
 from src.lib.StringDateAndTime import *
 
@@ -10,15 +11,18 @@ import json
 STOP_ASSISTANT = 1
 
 
-class Core:
+class Core(ParentClassForModules):
     #TODO - добавить ли свои исключения в работе?
     def __init__(self):
-        self.stt = SpeechToTextModule(recognizer_method='houndify')
-        self.tts = TextToSpeechModule()
-        self.commands = {}
+        name = "Core"
+        stt = SpeechToTextModule(recognizer_method='houndify')
+        tts = TextToSpeechModule()
+        super(Core, self).__init__(name=name, stt=stt, tts=tts)
         self.manager_modules = ManagerModules(stt=self.stt, tts=self.tts)
         self.load_commands()
+        self.pool_all_commands = {}
         self.tts.say('Инициализация произведена')
+
 
     def load_commands(self):
         """Загрузка команд ядра и менеджера"""
@@ -35,27 +39,36 @@ class Core:
         while run:
             # input_text = self.stt.get_textfromspeesh()
             input_text = input()
-            result = self.command_analyzer(input_text)
+            self.localisation_command(input_text)
+            result = True #self.command_analyzer()
             if result == STOP_ASSISTANT:
                 run = False
                 continue
-        self.tts.say("Lol kek chebureck")
+
+    def localisation_command(self, input_command: str):
+        self.pool_all_commands
+        #TODO - продолжить!!!!
+        #for commands, module_obj in self.pool_all_commands:
+        #    if input_command
+
 
     def command_analyzer(self, input_command: str):
-        # Todo: Подумать, может сделать общий пул комманд для увеличения скорости работы? Для этого будет
-        #  производится поиск из всех комманд, и комманды будут содержать спец атрибут, отсылающий к типам команды:
-        #  main/manager/module и сразу же будет происходить перенаправление xD
-        for id, words in self.commands.items():
-            if input_command in words:
-                return self.run_main_command(int(id))
-        #Если команда обращена не к ядру, передаем её на исполнение в менеджере
-        self.manager_modules.command_analyzer(input_command)
+        command_data = []
+        command_data = input_command.split(' ')
+        key_word = command_data[0] #TODO: Страшная условность - необходимо переосмыслить!!!
+        if key_word in self.commands.keys():
+            for key_words, structure in self.commands.items():
+                if key_word in key_words:
+                    return self.run_command(structure, command_data)
+            #Если команда обращена не к ядру, передаем её на исполнение в менеджере
+        else:
+            self.manager_modules.command_analyzer(input_command)
         return
 
-    def run_main_command(self, id_command: int):
-        #TODO - расширить функциональность
+    def run_command(self, structure: dict, args: list):
         """Обработчик команд ядра"""
         # При изменении списка команд - обязательно редактировать и эту функцию!!!
+        id_command = int(structure['id'])
         if id_command == 1:
             # Выключение ассистента
             self.tts.say('Выключение ассистента.')
