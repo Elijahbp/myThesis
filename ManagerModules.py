@@ -32,6 +32,7 @@ class ManagerModules(ParentClassForModules):
             self: ','.join(self.commands.keys()),
         }
 
+
     def load_commands(self):
         """Загрузка команд ядра и менеджера"""
         with open('resources/main_commands.json', encoding='utf-8') as main_commands:
@@ -54,13 +55,13 @@ class ManagerModules(ParentClassForModules):
                 self.tts.say('Модуль ' + name + ' - добавлен в пул!')
             modules_json.close()
 
+
     def run_command(self, structure: dict, args: list):
         id = int(structure['id'])
         "Поолучение аргументов в соответсвии со структурой"
         parameters = self.get_parameters_with_name(structure=structure, args=args)
         if not parameters:
-            return
-        # kwargs = {'name_module': 'DocumentUZI'}
+            return False
         if id == 1:
             # Запуск модуля с определенным имененем
             self.start_module(parameters['name_module'])
@@ -69,7 +70,7 @@ class ManagerModules(ParentClassForModules):
             self.stop_module(parameters['name_module'])
         if id == 3:
             # Вывести список модулей
-            self.get_info_modules()
+            self.get_info_modules(parameters['status_module'])
         if id == 4:
             # Получить информацию менеджере модулей
             self.info()
@@ -100,9 +101,9 @@ class ManagerModules(ParentClassForModules):
         else:
             return False
 
-    def get_info_modules(self):
+    def get_info_modules(self, status_module):
         output_info = 'Список запущенных модулей: \n'
-        for name,value in self.modules.items():
-            output_info += value['module'].info() +'\n'
+        for name, value in self.modules.items():
+            output_info += value['module'].info() + '\n'
         self.tts.say(output_info)
         return True

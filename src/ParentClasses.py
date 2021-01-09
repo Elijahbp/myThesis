@@ -22,6 +22,7 @@ class ParentClassForModules():
     def load_commands(self):
         pass
 
+
     def command_parser(self, input_command: str) -> list:
         # разбиваем строку на элементы
         input_words = input_command.split(' ')
@@ -30,8 +31,7 @@ class ParentClassForModules():
     def analyze_command_and_run(self, input_command: str):
         command_data = []
         command_data = self.command_parser(input_command=input_command)
-        key_word = command_data[
-            0]  # TODO: Страшная условность - необходимо переосмыслить!!!f key_word in self.commands.keys():
+        key_word = command_data[0]  # TODO: Страшная условность - необходимо переосмыслить!!!
         for key_words, structure in self.commands.items():
             if key_word in key_words:
                 return self.run_command(structure, command_data)
@@ -49,6 +49,7 @@ class ParentClassForModules():
         # Если аргумент не один, тогда есть вероятность, что там есть передаваемый параметр
         if len(args) > 1:
             i = 0
+            # TODO Сделать опциональные параметры!!!
             count_parameters = len(structure['args'].keys())
             if count_parameters > 0:
                 for arg in args[len(args) - count_parameters:]:
