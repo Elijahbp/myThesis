@@ -21,16 +21,6 @@ class DocumentUZI(ParentClassForModules):
             self.commands = json.load(commands)
             commands.close()
 
-    def command_analyzer(self,input_command: str):
-        #TODO - доделать
-        # Производится проверка на наличие соответствующей команды. Есои она присутствует, производится вызов нужной
-        #   функции.
-        if command in self.commands.values():
-            for key, words in self.commands.items():
-                if command in words:
-                    return self.run_command(int(key))
-        else:
-            None
 
     def run_command(self, structure: dict, args: list):
         #TODO - провести разбор выполняемых команд

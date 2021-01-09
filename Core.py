@@ -20,7 +20,6 @@ class Core(ParentClassForModules):
         super(Core, self).__init__(name=name, stt=stt, tts=tts)
         self.manager_modules = ManagerModules(stt=self.stt, tts=self.tts)
         self.load_commands()
-        self.pool_all_commands = {}
         self.tts.say('Инициализация произведена')
 
 
@@ -29,8 +28,6 @@ class Core(ParentClassForModules):
         with open('resources/main_commands.json', encoding='utf-8') as main_commands:
             loaded_json = json.load(main_commands)
             self.commands = loaded_json['сommands_main']
-            self.manager_modules.commands = loaded_json[
-                'сommands_module_manager']  # Присваивание команд менеджеру
             main_commands.close()
 
     def run(self):
@@ -39,30 +36,31 @@ class Core(ParentClassForModules):
         while run:
             # input_text = self.stt.get_textfromspeesh()
             input_text = input()
-            self.localisation_command(input_text)
-            result = True #self.command_analyzer()
-            if result == STOP_ASSISTANT:
+            result = self.localisation_command(input_text)
+            if result is STOP_ASSISTANT:
                 run = False
                 continue
 
     def localisation_command(self, input_command: str):
-        self.pool_all_commands
-        #TODO - продолжить!!!!
-        #for commands, module_obj in self.pool_all_commands:
+        """Метод определяет, к какому куда необходимо перенаправить команду"""
+        # for commands, module_obj in self.pool_all_commands:
         #    if input_command
-
-
-    def command_analyzer(self, input_command: str):
-        command_data = []
-        command_data = input_command.split(' ')
-        key_word = command_data[0] #TODO: Страшная условность - необходимо переосмыслить!!!
-        if key_word in self.commands.keys():
-            for key_words, structure in self.commands.items():
-                if key_word in key_words:
-                    return self.run_command(structure, command_data)
-            #Если команда обращена не к ядру, передаем её на исполнение в менеджере
+        if self.analyze_command_and_run(input_command=input_command):
+            return True
+            # Если команда обращена не к ядру, передаем её на исполнение в менеджере
         else:
-            self.manager_modules.command_analyzer(input_command)
+            # ПРобиваем на наличие введенной комманды из всего пула комманд всех модулей по очереди
+            try:
+                for module, words in self.manager_modules.pool_all_commands_modules.items():
+                    # Если часть находится в каком-то модуле - передаем все данные в этот модуль на анализ
+                    if module.analyze_command_and_run(input_command):
+                        return True
+                    else:
+                        continue
+            except RuntimeError:
+                print('Из-за добавления модуля, размер списка комманд модуля был увеличен.'
+                      ' Исключительный случай был обработан')
+
         return
 
     def run_command(self, structure: dict, args: list):

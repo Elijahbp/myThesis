@@ -22,13 +22,22 @@ class ManagerModules(ParentClassForModules):
         super(ManagerModules, self).__init__(name=name_manager, stt=stt, tts=tts)
         self.info_str['name_ru'] = "Менеджер модулей"
         self.info_str['version'] = "0.1"
+        self.load_commands()
         self.modules = {}  # Содержит структуру {'NameModule':{'class':fromimportlib',
         # 'module':obj,
         # 'status':STATUS_WORK}}
         self.search_modules()
+        # Изначально запущен только менеджер модулей, но далее, при запуске новых данное поле будет обновляться
         self.pool_all_commands_modules = {
             self: ','.join(self.commands.keys()),
         }
+
+    def load_commands(self):
+        """Загрузка команд ядра и менеджера"""
+        with open('resources/main_commands.json', encoding='utf-8') as main_commands:
+            loaded_json = json.load(main_commands)
+            self.commands = loaded_json['сommands_module_manager']
+            main_commands.close()
 
     def search_modules(self):
         """Поиск модулей на подключение"""
@@ -43,26 +52,21 @@ class ManagerModules(ParentClassForModules):
                     'status': STATUS_WORK['ready']
                 }
                 self.tts.say('Модуль ' + name + ' - добавлен в пул!')
-
             modules_json.close()
 
-    def command_analyzer(self, input_command: str):
-        # 1) Проверка на команду менеджера
-        # 2) Проверка на команду запущенных модуля (потом реализовать в модуле???)
-        #TODO: ПРОДОЛЖИТЬ С ЭТОГО МОМЕНТА!
-        command_data = []
-        command_data = input_command.split(',')
-        #for key_words, structure_command in self.commands.items():
-        return
-
-    def run_command(self, structure: dict, args):
-        kwargs = {'name_module': 'DocumentUZI'}
+    def run_command(self, structure: dict, args: list):
+        id = int(structure['id'])
+        "Поолучение аргументов в соответсвии со структурой"
+        parameters = self.get_parameters_with_name(structure=structure, args=args)
+        if not parameters:
+            return
+        # kwargs = {'name_module': 'DocumentUZI'}
         if id == 1:
             # Запуск модуля с определенным имененем
-            self.start_module(kwargs['name_module'])
+            self.start_module(parameters['name_module'])
         if id == 2:
             # Остановка модуля по имени
-            self.stop_module(kwargs['name_module'])
+            self.stop_module(parameters['name_module'])
         if id == 3:
             # Вывести список модулей
             self.get_info_modules()

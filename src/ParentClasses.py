@@ -22,25 +22,54 @@ class ParentClassForModules():
     def load_commands(self):
         pass
 
-    #abstractmethod
-    def command_analyzer(self, input_command: str) -> list:
-        """
-            Анализатор входной команды, для определения, какой функционал необходимо исполнять
-            :return - разбитую команду (list),
-        """
-        #1) разделяем команду
-        #2) по словно проходимся по имеющимся командам
-        #3) Если совпадение >1 - продолжаем поиск по совпадениям
-        #              если =1 - совпадение команды (стоит ли делать проверку полной целлостности комманды???)
-        #              если =0 - совпадений нет - Exception (?)
+    def command_parser(self, input_command: str) -> list:
+        # разбиваем строку на элементы
+        input_words = input_command.split(' ')
+        return input_words
 
-        #for key_words, structure in self.commands.items():
-        return
-
+    def analyze_command_and_run(self, input_command: str):
+        command_data = []
+        command_data = self.command_parser(input_command=input_command)
+        key_word = command_data[
+            0]  # TODO: Страшная условность - необходимо переосмыслить!!!f key_word in self.commands.keys():
+        for key_words, structure in self.commands.items():
+            if key_word in key_words:
+                return self.run_command(structure, command_data)
+        else:
+            return False
 
     @abstractmethod
     def run_command(self, structure: dict, args: list):
         pass
+
+    def get_parameters_with_name(self, structure: dict, args: list):
+        # правило для определения кол-ва параметров
+        # 1) Все аргументы идут в самом конце
+        parameters = {}
+        # Если аргумент не один, тогда есть вероятность, что там есть передаваемый параметр
+        if len(args) > 1:
+            i = 0
+            count_parameters = len(structure['args'].keys())
+            if count_parameters > 0:
+                for arg in args[len(args) - count_parameters:]:
+                    # Порядок параметров должен быть в соответствии с порядком
+                    key_meta_argument = list(structure['args'].keys())[i]
+                    output_value = None
+                    try:
+                        if structure['args'][key_meta_argument] == 'str':
+                            output_value = str(arg)
+                        elif structure['args'][key_meta_argument] == 'int':
+                            output_value = int(arg)
+                        elif structure['args'][key_meta_argument] == 'float':
+                            output_value = float(arg)
+                        elif structure['args'][key_meta_argument] == 'bool':
+                            output_value = bool(arg)
+                    except:
+                        self.tts.say("Параметр " + arg + '- явялется недопустимым!')
+                        return False
+                    parameters[key_meta_argument] = output_value
+                    i += 1
+        return parameters
 
     @abstractmethod
     def start(self):

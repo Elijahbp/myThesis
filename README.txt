@@ -16,4 +16,4 @@
     }
 
 
-Типы данных: ["int","float(double?)","str","bool(?)"]
+Типы данных: ["int","float","str","bool"]
