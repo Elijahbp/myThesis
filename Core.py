@@ -34,20 +34,19 @@ class Core(ParentClassForModules):
         """Запуск штатного режима голосового ассистента"""
         run = True
         while run:
-            # input_text = self.stt.get_textfromspeesh()
-            input_text = input()
+            input_text = self.stt.get_text_from_speeсh()
             result = self.localisation_command(input_text)
             if result is STOP_ASSISTANT:
                 run = False
                 continue
 
     def localisation_command(self, input_command: str):
-        """Метод определяет, к какому куда необходимо перенаправить команду"""
+        """Метод определяет, к какому модулю необходимо перенаправить команду"""
         # for commands, module_obj in self.pool_all_commands:
         #    if input_command
         if self.analyze_command_and_run(input_command=input_command):
             return True
-            # Если команда обращена не к ядру, передаем её на исполнение в менеджере
+            # Если команда обращена не к ядру, передаем её на исполнение в менеджер
         else:
             # ПРобиваем на наличие введенной комманды из всего пула комманд всех модулей по очереди
             try:

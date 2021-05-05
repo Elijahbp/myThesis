@@ -34,7 +34,8 @@ class ParentClassForModules():
         key_word = command_data[0]  # TODO: Страшная условность - необходимо переосмыслить!!!
         for key_words, structure in self.commands.items():
             if key_word in key_words:
-                return self.run_command(structure, command_data)
+                self.run_command(structure, command_data)
+                return True
         else:
             return False
 
@@ -65,6 +66,9 @@ class ParentClassForModules():
                             output_value = float(arg)
                         elif structure['args'][key_meta_argument] == 'bool':
                             output_value = bool(arg)
+                        elif structure['args'][key_meta_argument] == 'var':
+                            #TODO произвести идентификацию типа, если var!!!
+                            print('ПРОИЗВЕСТИ ИДЕНТИФИКАЦИЮ ТИПА!!!!')
                     except:
                         self.tts.say("Параметр " + arg + '- явялется недопустимым!')
                         return False

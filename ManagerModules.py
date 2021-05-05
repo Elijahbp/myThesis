@@ -23,9 +23,13 @@ class ManagerModules(ParentClassForModules):
         self.info_str['name_ru'] = "Менеджер модулей"
         self.info_str['version'] = "0.1"
         self.load_commands()
-        self.modules = {}  # Содержит структуру {'NameModule':{'class':fromimportlib',
+        self.modules = {}
+        # Содержит структуру
+        # {
+        # 'NameModule':{'class':fromimportlib',
         # 'module':obj,
-        # 'status':STATUS_WORK}}
+        # 'status':STATUS_WORK
+        # }}
         self.search_modules()
         # Изначально запущен только менеджер модулей, но далее, при запуске новых данное поле будет обновляться
         self.pool_all_commands_modules = {
@@ -65,22 +69,25 @@ class ManagerModules(ParentClassForModules):
         if id == 1:
             # Запуск модуля с определенным имененем
             self.start_module(parameters['name_module'])
-        if id == 2:
+        elif id == 2:
             # Остановка модуля по имени
             self.stop_module(parameters['name_module'])
-        if id == 3:
+        elif id == 3:
             # Вывести список модулей
             self.get_info_modules(parameters['status_module'])
-        if id == 4:
+        elif id == 4:
             # Получить информацию менеджере модулей
             self.info()
 
     def start_module(self, name_module):
+        """Запуск модуля по его имени"""
         self.tts.say('Запуск модуля ' + name_module)
-        class_module = self.modules[name_module]['class']
-        module_obj = self.modules[name_module]['module'] = class_module(stt=self.stt, tts=self.tts)
-        result = module_obj.start()
+        class_module = self.modules[name_module]['class'] # Получаем класс модуля
+        module_obj = self.modules[name_module]['module'] = class_module(stt=self.stt, tts=self.tts) # Инициализируем объект класса
+        result = module_obj.start() # Запускаем модуль
         if result:
+            # В рамках менеджера - переводим статус работы модуля в "Started", добавляем комманды модуля в пул всех
+            # команд
             self.modules[name_module]['status'] = STATUS_WORK['started']
             self.pool_all_commands_modules[module_obj] = ','.join(module_obj.commands.keys())
             self.tts.say('Модуль ' + name_module + ' - запущен!')
