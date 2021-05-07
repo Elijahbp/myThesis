@@ -1,0 +1,29 @@
+{
+  "name_patient": {
+    "text_on_speech": "Полное имя пациента",
+    "type_data": "str"
+  },
+    "research_date": {
+    "text_on_speech": "Дата Исследования",
+    "type_data": "date"
+  },
+  "lymph_nodes": {
+    "text_on_speech": "Лимфатические узлы",
+    "type_data": "str",
+    "variants": [
+      "подчелюстные",
+      "подмышечные",
+      "надключичные",
+      "подключичные",
+      "парастернальные"
+    ]
+  },
+  "description": {
+    "text_on_speech": "Описание",
+    "type_data": "str"
+  },
+  "research_result": {
+    "text_on_speech": "Заключение",
+    "type_data": "str"
+  }
+}

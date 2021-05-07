@@ -31,7 +31,7 @@ class ParentClassForModules():
     def analyze_command_and_run(self, input_command: str):
         command_data = []
         command_data = self.command_parser(input_command=input_command)
-        key_word = command_data[0]  # TODO: Страшная условность - необходимо переосмыслить!!!
+        key_word = command_data[0].lower()  # TODO: Страшная условность - необходимо переосмыслить!!!
         for key_words, structure in self.commands.items():
             if key_word in key_words:
                 self.run_command(structure, command_data)

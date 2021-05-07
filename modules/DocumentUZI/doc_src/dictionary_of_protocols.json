@@ -1,0 +1,47 @@
+{
+  "1":{
+    "name_protocol": "желчный пузырь",
+    "filename_protocol": "желчный пузырь.docx",
+    "trigger_words": ["желчный пузырь","пузырь"]
+  },
+  "2":{
+    "name_protocol": "кишечник",
+    "filename_protocol": "кишечник.docx",
+    "trigger_words": ["кишечник","жкт"]
+  },
+  "3":{
+    "name_protocol": "малтаз",
+    "filename_protocol": "малтаз.docx",
+    "trigger_words": ["малтаз"]
+  },
+  "4":{
+    "name_protocol": "молочные железы",
+    "filename_protocol": "молочные железы.docx",
+    "trigger_words": ["молочные железы","молочная железа"]
+  },
+  "5":{
+    "name_protocol": "плевральные полости",
+    "filename_protocol": "плевральные полости.docx",
+    "trigger_words": ["плевральные полости","полости","полость"]
+  },
+  "6":{
+    "name_protocol": "почки",
+    "filename_protocol": "почки.docx",
+    "trigger_words": ["почки"]
+  },
+  "7":{
+    "name_protocol": "узлы",
+    "filename_protocol": "узлы.docx",
+    "trigger_words": ["узлы","лимфа узлы","лимфатические узлы"]
+  },
+  "8":{
+    "name_protocol": "цдк мпс",
+    "filename_protocol": "цдк мпс.docx",
+    "trigger_words": ["цдк мпс","цдк","мпс"]
+  },
+  "9":{
+    "name_protocol": "щитовидные железы",
+    "filename_protocol": "щитовидные железы.docx",
+    "trigger_words": ["щитовидные железы","щитовидная железа","щитовидка"]
+  }
+}
