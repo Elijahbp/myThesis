@@ -71,8 +71,12 @@ class DocumentUZI(ParentClassForModules):
         return True
 
     def stop(self):
-        # TODO - реализовать
         """Остановка модуля DocumentUZI"""
+        # 1) Остановка сессии
+        # 2) Очистка загруженных протоколов исследованния
+        self.end_research()
+        self.commands = None
+        self.dictionary_of_protocols = None
         return True
 
     def start_research(self):
@@ -98,8 +102,18 @@ class DocumentUZI(ParentClassForModules):
                 self.tts.say("Сессия сохранена, и завершена!")
                 self.research_session = None
             else:
-                self.tts.say("Не все данные заполнены!")
-            return True
+                self.tts.say("Не все данные заполнены! Желаете закончить сессию?")
+                while True:
+                    input_text = self.stt.get_text_from_speeсh().lower()
+                    if input_text == 'да':
+                        self.research_session.close_session(force_exit=True)
+                        self.tts.say('Сессия завершена')
+                        self.research_session = None
+                        return True
+                    elif input_text == 'нет':
+                        return False
+                    else:
+                        self.tts.say('Комманда не ясна. Пожалуйста повторите!')
         else:
             self.tts.say("Отсутствует рабочая сессия!")
             return False

@@ -68,13 +68,14 @@ class ResearchSession():
         self.docx_obj.render(but_context)
         self.docx_obj.save(self.OUTPUT_PATH + '/' + self.name_docx)
 
-    def close_session(self):
+    def close_session(self, force_exit = False):
         """Закрытие сессии"""
         # 1) Проверка на заполненные данные
         # 2) Если сохранение нужно в любом случае -
-        for x, y in self.context.items():
-            if not y:
-                return False
+        if not force_exit:
+            for x, y in self.context.items():
+                if not y:
+                    return False
         self.docx_obj.render(self.context)
         self.docx_obj.save(self.OUTPUT_PATH + '/' + self.name_docx)
         return True
