@@ -10,7 +10,6 @@ class SpeechToTextModule:
 
     def get_text_from_speeсh(self):
         """Получение транскрибации текста (внешняя функция для вызова)"""
-        #TODO ЗАМЕНИТЬ!!!!
         text_from_speech = input() #TODO УБРАТЬ!!!!!!!
         #audio = self.listen()
         #text_from_speech = self.start_recognize(audio=audio)

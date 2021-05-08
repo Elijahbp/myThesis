@@ -74,7 +74,7 @@ class ResearchSession():
         # 2) Если сохранение нужно в любом случае -
         if not force_exit:
             for x, y in self.context.items():
-                if not y:
+                if y == '':
                     return False
         self.docx_obj.render(self.context)
         self.docx_obj.save(self.OUTPUT_PATH + '/' + self.name_docx)

@@ -71,6 +71,7 @@ class ManagerModules(ParentClassForModules):
             self.start_module(parameters['name_module'])
         elif id == 2:
             # Остановка модуля по имени
+            # TODO: сделать проверку имени
             self.stop_module(parameters['name_module'])
         elif id == 3:
             # Вывести список модулей
@@ -81,39 +82,54 @@ class ManagerModules(ParentClassForModules):
 
     def start_module(self, name_module):
         """Запуск модуля по его имени"""
-        if self.modules[name_module]['status'] != STATUS_WORK['started']:
-            self.tts.say('Запуск модуля ' + name_module)
-            class_module = self.modules[name_module]['class'] # Получаем класс модуля
-            module_obj = self.modules[name_module]['module'] = class_module(stt=self.stt, tts=self.tts) # Инициализируем объект класса
-            result = module_obj.start() # Запускаем модуль
-            if result:
-                # В рамках менеджера - переводим статус работы модуля в "Started", добавляем комманды модуля в пул всех
-                # команд
-                self.modules[name_module]['status'] = STATUS_WORK['started']
-                self.pool_all_commands_modules[module_obj] = ','.join(module_obj.commands.keys())
-                self.tts.say('Модуль ' + name_module + ' - запущен!')
-                return True
+        if self.check_name(name_module):
+            if self.modules[name_module]['status'] != STATUS_WORK['started']:
+                self.tts.say('Запуск модуля ' + name_module)
+                class_module = self.modules[name_module]['class'] # Получаем класс модуля
+                module_obj = self.modules[name_module]['module'] = class_module(stt=self.stt, tts=self.tts) # Инициализируем объект класса
+                result = module_obj.start() # Запускаем модуль
+                if result:
+                    # В рамках менеджера - переводим статус работы модуля в "Started", добавляем комманды модуля в пул всех
+                    # команд
+                    self.modules[name_module]['status'] = STATUS_WORK['started']
+                    self.pool_all_commands_modules[module_obj] = ','.join(module_obj.commands.keys())
+                    self.tts.say('Модуль ' + name_module + ' - запущен!')
+                    return True
+                else:
+                    self.tts.say('При запуске модуля ' + name_module + ' произошла ошибка!')
+                    return False
             else:
-                self.tts.say('При запуске модуля ' + name_module + ' произошла ошибка!')
+                self.tts.say('Модуль ' + name_module + " уже запущен")
                 return False
         else:
-            self.tts.say('Модуль ' + name_module + " уже запущен")
-            return False
+            self.tts.say('Имя модуля не распознано! Пожалуйста, повторите команду.')
+
 
     def stop_module(self, name_module):
-        if self.modules[name_module]['status'] == STATUS_WORK['started']:
-            self.tts.say('Остановка модуля ' + name_module)
-            result = self.modules[name_module]['module'].stop()
-            if result:
-                self.tts.say('Выполнено')
-                self.modules[name_module]['status'] = STATUS_WORK['stopped']
-                del self.pool_all_commands_modules[self.modules[name_module]['module']]
-                self.modules[name_module]['module'] = None
-                return True
+        if self.check_name(name_module):
+            if self.modules[name_module]['status'] == STATUS_WORK['started']:
+                self.tts.say('Остановка модуля ' + name_module)
+                result = self.modules[name_module]['module'].stop()
+                if result:
+                    self.tts.say('Выполнено')
+                    self.modules[name_module]['status'] = STATUS_WORK['stopped']
+                    del self.pool_all_commands_modules[self.modules[name_module]['module']]
+                    self.modules[name_module]['module'] = None
+                    return True
+                else:
+                    return False
             else:
+                self.tts.say('Модуль ' + name_module + " не запущен")
                 return False
         else:
-            self.tts.say('Модуль ' + name_module + " не запущен")
+            self.tts.say('Имя модуля не распознано! Пожалуйста, повторите комманду.')
+
+
+    def check_name(self, input_name):
+        """Проверка входящего имени комманды на корректность"""
+        if input_name in self.modules.keys():
+            return True
+        else:
             return False
 
     def get_info_modules(self, status_module):

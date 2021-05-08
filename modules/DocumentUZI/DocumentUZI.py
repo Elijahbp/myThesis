@@ -82,6 +82,7 @@ class DocumentUZI(ParentClassForModules):
     def start_research(self):
         # 1) Имя Клиента
         # 2) Тип исследования
+        #TODO Обдумать случай, когда пытаются остановить
         if not self.research_session:
             self.tts.say('Назовите имя пациента')
             name_patient = self.stt.get_text_from_speeсh()
