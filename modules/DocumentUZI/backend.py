@@ -2,6 +2,7 @@
 import datetime
 import json
 import os
+import platform
 import time
 
 from docxtpl import DocxTemplate
@@ -89,7 +90,10 @@ class ResearchSession():
         copy_doc = DocxTemplate(dst_path)
         copy_doc.render(context=self.context)
         copy_doc.save(dst_path)
-        os.startfile(dst_path)
+        if platform.system() == 'Windows':
+            os.startfile(dst_path)
+        elif platform.system() == 'Darwin':
+            os.system('open ' + dst_path)
         time.sleep(5)  # Ожидание, пока программа запускается
         while True:
             try:

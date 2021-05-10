@@ -122,26 +122,36 @@ class DocumentUZI(ParentClassForModules):
     def set_parameter(self):
         """Заполнить/Изменить параметр"""
 
-
     def what_is_left(self):
         """Что осталось?"""
-        str_on_say = self.research_session.get_info_whats_left()
-        self.tts.say(str_on_say)
+        if self.research_session:
+            str_on_say = self.research_session.get_info_whats_left()
+            self.tts.say(str_on_say)
+        else:
+            self.tts.say('Сессия не запущена! Для получения информации - начните сессию')
 
     def get_preview_version(self):
         """Вывести результат"""
-        self.research_session.open_preview()
+        if self.research_session:
+            self.research_session.open_preview()
+        else:
+            self.tts.say('Сессия не запущена! Для получения предварительной версии документа - начните сессию')
 
     def save_research(self):
         """Сохранение результата """
-        self.research_session.save_session()
-        self.tts.say("Результат сохранён!")
+        if self.research_session:
+            self.research_session.save_session()
+            self.tts.say("Результат сохранён!")
+        else:
+            self.tts.say('Сессия не запущена! Для сохранения сессии, сначала её нужно начать!')
 
     def print_research(self):
         """Печать документа"""
         if self.research_session:
             self.research_session.send_document_on_print()
             self.tts.say("Документ напечатан!")
+        else:
+            self.tts.say('Печать невозможна, так как нет открытой сессии!')
 
     def get_type_research(self):
         """Определение типа искомого исследования"""

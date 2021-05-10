@@ -44,23 +44,27 @@ class Core(ParentClassForModules):
         """Метод определяет, к какому модулю необходимо перенаправить команду"""
         # for commands, module_obj in self.pool_all_commands:
         #    if input_command
-        if self.analyze_command_and_run(input_command=input_command):
+        res_core = self.analyze_command_and_run(input_command=input_command)
+        if res_core:
             return True
             # Если команда обращена не к ядру, передаем её на исполнение в менеджер
-        else:
-            # ПРобиваем на наличие введенной комманды из всего пула комманд всех модулей по очереди
+        elif res_core is not None:
+            # Побиваем на наличие введенной комманды из всего пула комманд всех модулей по очереди
             try:
+                res_modules = None
                 for module, words in self.manager_modules.pool_all_commands_modules.items():
                     # Если часть находится в каком-то модуле - передаем все данные в этот модуль на анализ
                     if module.analyze_command_and_run(input_command):
                         return True
                     else:
                         continue
+                if not res_modules:
+                    self.tts.say('Комманда не распознана. Повторите пожалуйста!')
             except RuntimeError:
                 print('Из-за добавления модуля, размер списка комманд модуля был увеличен.'
                       ' Исключительный случай был обработан')
-
-        return
+        else:
+            return False
 
     def run_command(self, structure: dict, args: list):
         """Обработчик команд ядра"""

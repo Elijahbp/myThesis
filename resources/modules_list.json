@@ -1,5 +1,13 @@
 {
   "modules": {
-    "DocumentUZI": "./modules/DocumentUZI/DocumentUZI.py"
+    "DocumentUZI": {
+      "path": "./modules/DocumentUZI/DocumentUZI.py",
+      "trigger_name": [
+        "исследование узи",
+        "узи",
+        "исследование"
+      ],
+      "text_on_speech": "Исследование узи"
+    }
   }
 }

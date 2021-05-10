@@ -29,6 +29,9 @@ class ParentClassForModules():
         return input_words
 
     def analyze_command_and_run(self, input_command: str):
+        if input_command == '':
+            self.tts.say('Комманда не распознан. Повторите пожалуйста!')
+            return None
         command_data = []
         command_data = self.command_parser(input_command=input_command)
         key_word = command_data[0].lower()  # TODO: Страшная условность - необходимо переосмыслить!!!
