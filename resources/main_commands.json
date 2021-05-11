@@ -1,44 +1,52 @@
 {
   "сommands_main": {
-    "exit,выход":{
+    "exit":{
       "id": "1",
-      "args": {}
+      "args": {},
+      "trigger_words": ["выход","exit","какой сегодня день"]
     },
-    "время,который час,сколько сейчас времени,time":{
+    "time":{
       "id": "2",
-      "args": {}
+      "args": {},
+      "trigger_words": ["время","который час","сколько сейчас времени","time"]
     },
-    "день": {
+    "today": {
       "id": "3",
-      "args": {}
+      "args": {},
+      "trigger_words": ["день","сегодня","какой сегодня день","day"]
     }
   },
   "сommands_module_manager": {
-    "старт,запуск": {
+    "start_module": {
       "id": "1",
+      "trigger_words": ["старт","запуск"],
       "args": {
         "name_module": "str"
       }
     },
-    "остановить": {
+    "stop_module": {
       "id": "2",
+      "trigger_words": ["остановить","стоп"],
       "args": {
         "name_module": "str"
       }
     },
-    "список модулей": {
+    "list_modules": {
       "id": "3",
+      "trigger_words": ["модули","список модулей"],
       "args": {
         "status_module": "str"
       }
     },
-    "получить информацию о менеджере модулей": {
+    "get_info_manager": {
       "id": "4",
+      "trigger_words": ["информация о менеджере"],
       "args": {
       }
     },
-    "получить информацию о модуле": {
+    "get_info_module": {
       "id": "5",
+      "trigger_words": ["информация о модуле"],
       "args": {
         "name_module": "str"
       }

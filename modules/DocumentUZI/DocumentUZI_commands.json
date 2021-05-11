@@ -1,45 +1,53 @@
 {
-  "начать исследование": {
+  "start_research": {
     "id": "1",
+    "trigger_words": ["начать исследование"],
     "args": {
       "type_research": "str"
     }
   },
-  "закончить исследование": {
+  "stop_research": {
     "id": "2",
+    "trigger_words": ["закончить иследование"],
     "args": {
     }
   },
-  "заполнить, изменить": {
+  "write_data": {
     "id": "3",
+    "trigger_words": ["заполнить","изменить"],
     "args": {
       "parameter-name": "str"
     }
   },
-  "что осталось": {
+  "what_left": {
     "id": "4",
+    "trigger_words": ["что осталось"],
     "args": {
       "parameter-name": "str"
     }
   },
-  "сохранить исследование": {
+  "save_research": {
     "id": "5",
+    "trigger_words": ["сохранить иследование"],
     "args": {
     }
   },
-  "вывести результат": {
+  "view_doc_reseach": {
     "id": "6",
+    "trigger_words":["вывести результат"],
     "args": {
     }
   },
-  "печать": {
+  "print_researh": {
     "id": "7",
+    "trigger_words":["печать","Напечатать результат"],
     "args": {
     }
   },
 
-  "справка": {
+  "get_info_command": {
     "id": "8",
+    "trigger_words":["справка"],
     "args": {
     }
   }

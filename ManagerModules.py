@@ -75,7 +75,6 @@ class ManagerModules(ParentClassForModules):
             self.start_module(parameters['name_module'])
         elif id == 2:
             # Остановка модуля по имени
-            # TODO: сделать проверку имени
             self.stop_module(parameters['name_module'])
         elif id == 3:
             # Вывести список модулей
@@ -95,7 +94,7 @@ class ManagerModules(ParentClassForModules):
                                                                                 tts=self.tts)  # Инициализируем объект класса
                 result = module_obj.start()  # Запускаем модуль
                 if result:
-                    # В рамках менеджера - переводим статус работы модуля в "Started", добавляем комманды модуля в пул всех
+                    # В рамках менеджера - переводим статус работы модуля в "Started", добавляем команды модуля в пул всех
                     # команд
                     self.modules[name_module]['status'] = STATUS_WORK['started']
                     self.pool_all_commands_modules[module_obj] = ','.join(module_obj.commands.keys())
@@ -129,10 +128,10 @@ class ManagerModules(ParentClassForModules):
                 self.tts.say('Модуль ' + self.modules[name_module]['text_on_speech'] + " не запущен")
                 return False
         else:
-            self.tts.say('Имя модуля не распознано! Пожалуйста, повторите комманду.')
+            self.tts.say('Имя модуля не распознано! Пожалуйста, повторите кманду.')
 
     def check_name(self, trigger_word):
-        """Проверка входящего имени комманды на корректность"""
+        """Проверка входящего имени команды на корректность"""
         for name, structure in self.modules.items():
             if trigger_word in structure['trigger_name']:
                 return name

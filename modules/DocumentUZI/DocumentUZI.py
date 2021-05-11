@@ -14,7 +14,7 @@ class DocumentUZI(ParentClassForModules):
         self.info_str['name_ru'] = "Документы УЗИ"
         self.info_str['version'] = "0.1"
         self.commands = None
-        self.dictionary_of_protocols = None
+        self.dictionary_of_arguments = None
         self.load_commands()
         self.load_dictionary_of_protocols()
         self.research_session = None  # сессия исследования
@@ -30,12 +30,12 @@ class DocumentUZI(ParentClassForModules):
         path = './modules/' + self.name + '/doc_src/dictionary_of_protocols.json'
         with open(path, encoding='utf-8') as dictionary_of_protocols_json:
             # Получаем модули и пути к ним
-            self.dictionary_of_protocols = json.load(dictionary_of_protocols_json)
+            self.dictionary_of_arguments = json.load(dictionary_of_protocols_json)
             dictionary_of_protocols_json.close()
 
-    def run_command(self, structure: dict, args: list):
+    def run_command(self, parse_data: dict):
         # TODO - провести разбор выполняемых команд
-        id = int(structure['id'])
+        id = int(parse_data['command']['id'])
         if id == 1:
             """Начать исследование"""
             self.start_research()
@@ -45,8 +45,7 @@ class DocumentUZI(ParentClassForModules):
             self.end_research()
         elif id == 3:
             """Заполнить/Изменить параметр"""
-            # TODO Доделать
-            # self.set_parameter()
+            self.set_parameter(structure, args)
         elif id == 4:
             """Что осталось заполнить?"""
             self.what_is_left()
@@ -76,13 +75,13 @@ class DocumentUZI(ParentClassForModules):
         # 2) Очистка загруженных протоколов исследованния
         self.end_research()
         self.commands = None
-        self.dictionary_of_protocols = None
+        self.dictionary_of_arguments = None
         return True
 
     def start_research(self):
         # 1) Имя Клиента
         # 2) Тип исследования
-        #TODO Обдумать случай, когда пытаются остановить
+        # TODO Обдумать случай, когда пытаются остановить
         if not self.research_session:
             self.tts.say('Назовите имя пациента')
             name_patient = self.stt.get_text_from_speeсh()
@@ -94,7 +93,6 @@ class DocumentUZI(ParentClassForModules):
             input_text = self.stt.get_text_from_speeсh().lower()
             if input_text == 'да':
                 self.end_research()
-
 
     def end_research(self):
         """Завершение исследования"""
@@ -114,13 +112,17 @@ class DocumentUZI(ParentClassForModules):
                     elif input_text == 'нет':
                         return False
                     else:
-                        self.tts.say('Комманда не ясна. Пожалуйста повторите!')
+                        self.tts.say('Команда не ясна. Пожалуйста повторите!')
         else:
             self.tts.say("Отсутствует рабочая сессия!")
             return False
 
-    def set_parameter(self):
+    def set_parameter(self, parse_data:dict):
         """Заполнить/Изменить параметр"""
+        if self.research_session:
+            """ поиск требуемого параметра по тригерным словам в словаре протокола"""
+        else:
+            self.tts.say('Сессия не запущена!')
 
     def what_is_left(self):
         """Что осталось?"""
@@ -159,7 +161,7 @@ class DocumentUZI(ParentClassForModules):
         type_research = None
         while type_research is None:
             type_on_search = self.stt.get_text_from_speeсh().lower()
-            for id, type_research_structure in self.dictionary_of_protocols.items():
+            for id, type_research_structure in self.dictionary_of_arguments.items():
                 if type_on_search in type_research_structure["trigger_words"]:
                     return type_research_structure
 

@@ -1,14 +1,17 @@
 {
   "name_patient": {
     "text_on_speech": "Полное имя пациента",
+    "trigger_words": ["имя пациента"],
     "type_data": "str"
   },
     "research_date": {
     "text_on_speech": "Дата Исследования",
+    "trigger_words": ["дата исследования"],
     "type_data": "date"
   },
   "lymph_nodes": {
     "text_on_speech": "Лимфатические узлы",
+    "trigger_words": ["лимфатически узлы","узлы"],
     "type_data": "str",
     "variants": [
       "подчелюстные",
@@ -20,10 +23,12 @@
   },
   "description": {
     "text_on_speech": "Описание",
+    "trigger_words": ["описание"],
     "type_data": "str"
   },
   "research_result": {
     "text_on_speech": "Заключение",
+    "trigger_words": ["заклчиение","вывод"],
     "type_data": "str"
   }
 }

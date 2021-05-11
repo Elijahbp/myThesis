@@ -12,7 +12,6 @@ STOP_ASSISTANT = 1
 
 
 class Core(ParentClassForModules):
-    #TODO - добавить ли свои исключения в работе?
     def __init__(self):
         name = "Core"
         stt = SpeechToTextModule(recognizer_method='houndify')
@@ -34,42 +33,43 @@ class Core(ParentClassForModules):
         """Запуск штатного режима голосового ассистента"""
         run = True
         while run:
-            input_text = self.stt.get_text_from_speeсh()
-            result = self.localisation_command(input_text)
+            input_data = self.stt.get_text_from_speeсh()
+            #TODO переработать
+            result = self.localisation_command(input_data)
             if result is STOP_ASSISTANT:
                 run = False
                 continue
 
-    def localisation_command(self, input_command: str):
+    def localisation_command(self, input_data: str):
         """Метод определяет, к какому модулю необходимо перенаправить команду"""
-        # for commands, module_obj in self.pool_all_commands:
-        #    if input_command
-        res_core = self.analyze_command_and_run(input_command=input_command)
+        #TODO ПЕРЕРАБОТАТЬ весь метод!!!!
+        res_core = self.analyze_command_and_run(input_data=input_data)
         if res_core:
             return True
             # Если команда обращена не к ядру, передаем её на исполнение в менеджер
         elif res_core is not None:
-            # Побиваем на наличие введенной комманды из всего пула комманд всех модулей по очереди
+            # Побиваем на наличие введенной команды из всего пула команд всех модулей по очереди
             try:
+
                 res_modules = None
                 for module, words in self.manager_modules.pool_all_commands_modules.items():
                     # Если часть находится в каком-то модуле - передаем все данные в этот модуль на анализ
-                    if module.analyze_command_and_run(input_command):
+                    if module.analyze_command_and_run(input_data):
                         return True
                     else:
                         continue
                 if not res_modules:
-                    self.tts.say('Комманда не распознана. Повторите пожалуйста!')
+                    self.tts.say('Команда не распознана. Повторите пожалуйста!')
             except RuntimeError:
-                print('Из-за добавления модуля, размер списка комманд модуля был увеличен.'
+                print('Из-за добавления модуля, размер списка команд модуля был увеличен.'
                       ' Исключительный случай был обработан')
         else:
             return False
 
-    def run_command(self, structure: dict, args: list):
+    def run_command(self, parse_data:dict):
         """Обработчик команд ядра"""
         # При изменении списка команд - обязательно редактировать и эту функцию!!!
-        id_command = int(structure['id'])
+        id_command = int(parse_data['id'])
         if id_command == 1:
             # Выключение ассистента
             self.tts.say('Выключение ассистента.')

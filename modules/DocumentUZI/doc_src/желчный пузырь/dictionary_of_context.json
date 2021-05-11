@@ -1,10 +1,12 @@
 {
   "name_patient": {
     "text_on_speech": "Полное имя пациента",
+    "trigger_word": "",
     "type_data": "str"
   },
     "research_date": {
     "text_on_speech": "Дата Исследования",
+    "trigger_word": "",
     "type_data": "date"
   },
     "initial_volume_of_the_gallbladder":{},
