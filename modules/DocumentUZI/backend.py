@@ -179,7 +179,7 @@ class ResearchSession():
                         except RuntimeError:
                             print('Уменьшены варианты искомых команд')
             else:
-                return (False,"Имя контекста нераспознано. Пожалуйста, повторте ещё раз!")
+                break
         if not structure:
             return (False,"Имя контекста нераспознано. Пожалуйста, повторте ещё раз!")
         elif len(structure.keys()) > 1:
