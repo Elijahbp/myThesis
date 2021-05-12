@@ -1,14 +1,14 @@
 {
   "start_research": {
     "id": "1",
-    "trigger_words": ["начать иследование"],
+    "trigger_words": ["начать исследование"],
     "args": {
       "type_research": "str"
     }
   },
   "stop_research": {
     "id": "2",
-    "trigger_words": ["закончить иследование"],
+    "trigger_words": ["закончить исследование"],
     "args": {
     }
   },
@@ -27,7 +27,7 @@
   },
   "save_research": {
     "id": "5",
-    "trigger_words": ["сохранить иследование"],
+    "trigger_words": ["сохранить исследование"],
     "args": {
     }
   },

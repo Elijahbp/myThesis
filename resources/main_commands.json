@@ -3,7 +3,7 @@
     "exit":{
       "id": "1",
       "args": {},
-      "trigger_words": ["выход","exit","какой сегодня день недели"]
+      "trigger_words": ["выход","exit"]
     },
     "time":{
       "id": "2",
