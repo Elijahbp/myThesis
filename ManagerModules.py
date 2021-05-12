@@ -32,8 +32,11 @@ class ManagerModules(ParentClassForModules):
         # }}
         self.search_modules()
         # Изначально запущен только менеджер модулей, но далее, при запуске новых данное поле будет обновляться
+        list_trigger_words = []
+        for x in self.commands.values():
+            list_trigger_words.extend(x["trigger_words"])
         self.pool_all_commands_modules = {
-            self: ','.join(self.commands.keys()),
+            self: ','.join(list_trigger_words),
         }
 
 
@@ -43,6 +46,7 @@ class ManagerModules(ParentClassForModules):
             loaded_json = json.load(main_commands)
             self.commands = loaded_json['сommands_module_manager']
             main_commands.close()
+
 
     def search_modules(self):
         """Поиск модулей на подключение"""
@@ -64,21 +68,23 @@ class ManagerModules(ParentClassForModules):
             modules_json.close()
 
 
-    def run_command(self, structure: dict, args: list):
-        id = int(structure['id'])
+    def run_command(self, parsed_data: dict):
+        id = int(parsed_data["command"]['id'])
         "Поолучение аргументов в соответсвии со структурой"
-        parameters = self.get_parameters_with_name(structure=structure, args=args)
-        if not parameters:
+        if not parsed_data:
             return False
         if id == 1:
             # Запуск модуля с определенным имененем
-            self.start_module(parameters['name_module'])
+            self.start_module(parsed_data['sets']['0']['data'])
         elif id == 2:
             # Остановка модуля по имени
-            self.stop_module(parameters['name_module'])
+            self.stop_module(parsed_data['sets']['0']['data'])
         elif id == 3:
             # Вывести список модулей
-            self.get_info_modules(parameters['status_module'])
+            if parsed_data['sets']['0']:
+                self.get_info_modules(parsed_data['sets']['0']['data'])
+            else:
+                self.get_info_modules()
         elif id == 4:
             # Получить информацию менеджере модулей
             self.info()

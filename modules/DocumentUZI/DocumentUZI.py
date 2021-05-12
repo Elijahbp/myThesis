@@ -16,7 +16,7 @@ class DocumentUZI(ParentClassForModules):
         self.commands = None
         self.dictionary_of_arguments = None
         self.load_commands()
-        self.load_dictionary_of_protocols()
+        self.load_dictionary_of_arguments()
         self.research_session = None  # сессия исследования
 
     def load_commands(self):
@@ -26,16 +26,16 @@ class DocumentUZI(ParentClassForModules):
             self.commands = json.load(commands)
             commands.close()
 
-    def load_dictionary_of_protocols(self):
+    def load_dictionary_of_arguments(self):
         path = './modules/' + self.name + '/doc_src/dictionary_of_protocols.json'
         with open(path, encoding='utf-8') as dictionary_of_protocols_json:
             # Получаем модули и пути к ним
             self.dictionary_of_arguments = json.load(dictionary_of_protocols_json)
             dictionary_of_protocols_json.close()
 
-    def run_command(self, parse_data: dict):
+    def run_command(self, parsed_data: dict):
         # TODO - провести разбор выполняемых команд
-        id = int(parse_data['command']['id'])
+        id = int(parsed_data['command']['id'])
         if id == 1:
             """Начать исследование"""
             self.start_research()
@@ -45,7 +45,7 @@ class DocumentUZI(ParentClassForModules):
             self.end_research()
         elif id == 3:
             """Заполнить/Изменить параметр"""
-            self.set_parameter(structure, args)
+            self.set_parameter(parsed_data)
         elif id == 4:
             """Что осталось заполнить?"""
             self.what_is_left()
@@ -60,7 +60,7 @@ class DocumentUZI(ParentClassForModules):
             self.print_research()
         elif id == 8:
             """Справка"""
-            # TODO Доделать
+            self.get_help_info()
 
         return True
 
@@ -81,7 +81,6 @@ class DocumentUZI(ParentClassForModules):
     def start_research(self):
         # 1) Имя Клиента
         # 2) Тип исследования
-        # TODO Обдумать случай, когда пытаются остановить
         if not self.research_session:
             self.tts.say('Назовите имя пациента')
             name_patient = self.stt.get_text_from_speeсh()
@@ -117,10 +116,14 @@ class DocumentUZI(ParentClassForModules):
             self.tts.say("Отсутствует рабочая сессия!")
             return False
 
-    def set_parameter(self, parse_data:dict):
+    def set_parameter(self, parsed_data:dict):
         """Заполнить/Изменить параметр"""
         if self.research_session:
-            """ поиск требуемого параметра по тригерным словам в словаре протокола"""
+            result = self.research_session.change_context(parsed_data['sets']['0']['data'])
+            if result[0]:
+                self.tts.say(result[1] + '- заполнено')
+            else:
+                self.tts.say(result[1])
         else:
             self.tts.say('Сессия не запущена!')
 
@@ -164,6 +167,21 @@ class DocumentUZI(ParentClassForModules):
             for id, type_research_structure in self.dictionary_of_arguments.items():
                 if type_on_search in type_research_structure["trigger_words"]:
                     return type_research_structure
+
+    def get_help_info(self):
+        self.tts.say(
+            """
+            Для работы с модулем Иследование узи необходимо использовать голосовые команды:
+            Начать иследование; Сохранить иследование; Закончить иследование;
+            Заполнить или изменить - необходимо для записи данных иследования;
+            Что осталось - перечисление параметров, которые не были заполнены;
+            Вывести результат - открывается файл исследования в office word;
+            Печать - отправляет файл иследования на печать;
+            """
+        )
+
+
+
 
 
 def init(stt: SpeechToTextModule, tts: TextToSpeechModule):

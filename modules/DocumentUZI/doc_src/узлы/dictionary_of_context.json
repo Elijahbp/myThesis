@@ -28,7 +28,7 @@
   },
   "research_result": {
     "text_on_speech": "Заключение",
-    "trigger_words": ["заклчиение","вывод"],
+    "trigger_words": ["заключение","вывод"],
     "type_data": "str"
   }
 }

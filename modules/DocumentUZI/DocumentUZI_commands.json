@@ -1,7 +1,7 @@
 {
   "start_research": {
     "id": "1",
-    "trigger_words": ["начать исследование"],
+    "trigger_words": ["начать иследование"],
     "args": {
       "type_research": "str"
     }
@@ -16,14 +16,13 @@
     "id": "3",
     "trigger_words": ["заполнить","изменить"],
     "args": {
-      "parameter-name": "str"
+      "parameter-name": "raw"
     }
   },
   "what_left": {
     "id": "4",
     "trigger_words": ["что осталось"],
     "args": {
-      "parameter-name": "str"
     }
   },
   "save_research": {

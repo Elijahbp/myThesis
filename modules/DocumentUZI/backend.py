@@ -8,6 +8,8 @@ import time
 from docxtpl import DocxTemplate
 import shutil
 
+from src.lib.MethodsForWords import get_count_word
+
 
 class ResearchSession():
     ABS_PATH = os.path.abspath('./modules/DocumentUZI').replace('\\', '/')
@@ -39,16 +41,18 @@ class ResearchSession():
             # Получаем модули и пути к ним
             dictionary_context = json.load(dictionary_context_json)
             dictionary_context_json.close()
-        if self.check_context():
+        if self.check_context(dictionary_context):
             return dictionary_context
         else:
             return None  # TODO ПЕРЕСМОТРЕТЬ, МОЖЕТ СДЕЛАТЬ CALLBACK
 
-    def check_context(self) -> bool:
+    def check_context(self,dictionary_context) -> bool:
         """Проверка контекста"""
         # TODO ДОДЕЛАТЬ!!!!
-
-        return True
+        if self.docx_obj.undeclared_template_variables == dictionary_context.keys():
+            return True
+        else:
+            return False
 
     def create_document(self) -> DocxTemplate:
         """Создание рабочего документа, и выгрузка """
@@ -126,5 +130,61 @@ class ResearchSession():
             output_str = 'Осталось заполнить:\n' + output_str
         return output_str
 
-    def change_context(self, name, data):
-        self.context[name] = data
+    def change_context(self, raw_data: list):
+        result = self.get_data_from_raw(raw_data)
+        if result[0]:
+            self.context[result[0]] = result[1]
+            return (True,self.dictionary_context[result[0]]["text_on_speech"])
+        else:
+            return result
+
+
+    def get_data_from_raw(self, raw_data: list):
+        name_context = None
+        data = None
+        # парсим входную строку
+        count_word_input_data = len(raw_data)
+        # проверяем на комманды
+        structure = {}
+        count_word = 0
+        max_count_word_command = 0
+        for word in raw_data:
+            count_word += 1
+            if count_word == 1:
+                for key, value in self.dictionary_context.items():
+                    # получаем перечень слов, которые были затригерены, и могут быть частью вводимой комманды
+                    triggered_words = list(filter(lambda x: word.lower() in x, value['trigger_words']))
+                    if triggered_words:
+                        # получаем словосочетание, затригеревшее комманду, чтобы производить сверку
+                        min_count_word_command = get_count_word(triggered_words,'min')
+                        max_count_word_command = get_count_word(triggered_words,'max')
+                        # если число слов >= числу в слов в команде, тогда берем её
+                        if min_count_word_command <= count_word_input_data:
+                            structure[key] = triggered_words
+                if len(structure.keys()) == 1:
+                    break
+            elif structure:
+                # Если слова тригеры уже имеются - проводим проверку через них
+                    if count_word <= max_count_word_command:
+                        try:
+                            for key, value in structure.items():
+                                if any(word.lower() in x for x in value):
+                                    continue
+                                elif count_word <= get_count_word(structure[key],'max'):
+                                    # Удаляем только ту структуру, у которой слов в комманде >= count_word
+                                    structure[key] = None
+                                else:
+                                    continue
+                            structure = {x: y for x, y in structure.items() if y is not None}
+                        except RuntimeError:
+                            print('Уменьшены варианты искомых команд')
+            else:
+                return (False,"Имя контекста нераспознано. Пожалуйста, повторте ещё раз!")
+        if not structure:
+            return (False,"Имя контекста нераспознано. Пожалуйста, повторте ещё раз!")
+        elif len(structure.keys()) > 1:
+            return (False,"Имя контекста нераспознано не ясно! Имя подходит сразу к нескольким контекстам")
+        else:
+            name  = list(structure.keys())[0]
+            raw_data = (' ').join(raw_data[count_word:])
+            return (name, raw_data)
