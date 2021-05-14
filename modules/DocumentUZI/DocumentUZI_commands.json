@@ -18,8 +18,9 @@
     "args": {
       "data_to_fill":
       {
-        "parameter-name": "str",
-        "data": "str"
+        "name_parameter": "tag",
+        "type_name_parameter": "str",
+        "type_following_data": "str"
       }
     }
   },

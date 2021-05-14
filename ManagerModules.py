@@ -138,8 +138,9 @@ class ManagerModules(ParentClassForModules):
 
     def check_name(self, trigger_word):
         """Проверка входящего имени команды на корректность"""
+        trigger_word = ' '.join(trigger_word)
         for name, structure in self.modules.items():
-            if trigger_word in structure['trigger_name']:
+            if any(trigger_word in x for x in structure['trigger_name']):
                 return name
         else:
             return False

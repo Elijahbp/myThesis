@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 import platform
+import subprocess
 import time
 
 from docxtpl import DocxTemplate
@@ -97,7 +98,7 @@ class ResearchSession():
         if platform.system() == 'Windows':
             os.startfile(dst_path)
         elif platform.system() == 'Darwin':
-            os.system('open ' + dst_path)
+            subprocess.call(['open ', dst_path])
         time.sleep(5)  # Ожидание, пока программа запускается
         while True:
             try:
@@ -130,25 +131,24 @@ class ResearchSession():
             output_str = 'Осталось заполнить:\n' + output_str
         return output_str
 
-    def change_context(self, raw_data: list):
-        result = self.get_data_from_raw(raw_data)
+    def change_context(self, parsed_data: dict):
+        result = self.get_data_from_raw(parsed_data)
         if result[0]:
             self.context[result[0]] = result[1]
-            return (True,self.dictionary_context[result[0]]["text_on_speech"])
+            return (True, self.dictionary_context[result[0]]["text_on_speech"])
         else:
             return result
 
-
-    def get_data_from_raw(self, raw_data: list):
+    def get_data_from_raw(self, parsed_data: dict):
         name_context = None
         data = None
         # парсим входную строку
-        count_word_input_data = len(raw_data)
+        count_word_input_data = len(parsed_data['data'])
         # проверяем на комманды
         structure = {}
         count_word = 0
         max_count_word_command = 0
-        for word in raw_data:
+        for word in parsed_data['data']:
             count_word += 1
             if count_word == 1:
                 for key, value in self.dictionary_context.items():
@@ -156,13 +156,14 @@ class ResearchSession():
                     triggered_words = list(filter(lambda x: word.lower() in x, value['trigger_words']))
                     if triggered_words:
                         # получаем словосочетание, затригеревшее комманду, чтобы производить сверку
-                        min_count_word_command = get_count_word(triggered_words,'min')
-                        max_count_word_command = get_count_word(triggered_words,'max')
+                        min_count_word_command = get_count_word(triggered_words, 'min')
+                        max_count_word_command = get_count_word(triggered_words, 'max')
                         # если число слов >= числу в слов в команде, тогда берем её
                         if min_count_word_command <= count_word_input_data:
                             structure[key] = triggered_words
-                if len(structure.keys()) == 1:
-                    break
+                # if len(structure.keys()) == 1:
+                # TODO Надо следлать проверку на коректность тригерных слов
+                #    break
             elif structure:
                 # Если слова тригеры уже имеются - проводим проверку через них
                     if count_word <= max_count_word_command:
@@ -185,6 +186,6 @@ class ResearchSession():
         elif len(structure.keys()) > 1:
             return (False,"Имя контекста нераспознано не ясно! Имя подходит сразу к нескольким контекстам")
         else:
-            name  = list(structure.keys())[0]
-            raw_data = (' ').join(raw_data[count_word:])
+            name = list(structure.keys())[0]
+            raw_data = (' ').join(parsed_data['data'][count_word:])
             return (name, raw_data)

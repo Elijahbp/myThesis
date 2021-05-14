@@ -119,7 +119,7 @@ class DocumentUZI(ParentClassForModules):
     def set_parameter(self, parsed_data:dict):
         """Заполнить/Изменить параметр"""
         if self.research_session:
-            result = self.research_session.change_context(parsed_data['sets']['0']['data'])
+            result = self.research_session.change_context(parsed_data['sets']['0'])
             if result[0]:
                 self.tts.say(result[1] + '- заполнено')
             else:

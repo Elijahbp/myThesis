@@ -117,11 +117,15 @@ class ParentClassForModules():
                 #проходимся по каждому следущему слову
                 parsed_data['sets'][str(i)] = {}
                 parsed_data['sets'][str(i)]['name_arg'] = name_arg
-                if type(type_arg) is dict :
-                    #Если тип данных raw - сырой, то тогда берем все данные, что идут после команды
+                if type(type_arg) is dict:
+                    # TODO ВВСТИ ОБЯЗАТЕЛЬНУЮ ПРОВЕРКУ НА КОРРЕКТНОСТЬ ВВОДИМЫХ СЛОВ
+                    # Если команда содержит структуру параметр
+                    parsed_data['sets'][str(i)]['name_parameter'] = type_arg['name_parameter']
+                    parsed_data['sets'][str(i)]['type_name_parameter'] = type_arg['type_name_parameter']
+                    parsed_data['sets'][str(i)]['type_following_data'] = type_arg['type_following_data']
                     parsed_data['sets'][str(i)]['data'] = input_data[count_word:]
                 else:
-                    parsed_data['sets'][str(i)]['data'] = input_data[count_word]
+                    parsed_data['sets'][str(i)]['data'] = input_data[count_word:]
 
         return parsed_data
 
