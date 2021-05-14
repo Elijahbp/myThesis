@@ -47,7 +47,6 @@ class ParentClassForModules():
         # структура сетов:
         # "sets":{
         # "1":{
-        #   "name_arg": ,
         #   "data":
         # }
         # "2":{
@@ -118,7 +117,7 @@ class ParentClassForModules():
                 #проходимся по каждому следущему слову
                 parsed_data['sets'][str(i)] = {}
                 parsed_data['sets'][str(i)]['name_arg'] = name_arg
-                if type_arg == 'raw':
+                if type(type_arg) is dict :
                     #Если тип данных raw - сырой, то тогда берем все данные, что идут после команды
                     parsed_data['sets'][str(i)]['data'] = input_data[count_word:]
                 else:

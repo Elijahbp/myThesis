@@ -4,17 +4,33 @@
     "id":"n",
     "trigger_words": ["cлово/сочетание"]
     "args":{
-        "аргумент1":"тип данных",
-        "аргумент2":"тип данных"
+        "arg_name":"тип данных",
+        "arg_name":{
+            "parameter_name":"str",
+            "data":["raw"]
+        }
     }
 }
-
 
 "exit":{
       "id": "1",
       "args": {},
       "trigger_words": ["выход","exit"]
 },
+
+"name_tag": {
+    "text_on_speech": "Текст, что будет говорить ассистент",
+    "trigger_words": ["слово/сочетание"],
+    "type_data": "int/float/str/bool/raw"
+}
+
+  "name_patient": {
+    "text_on_speech": "Полное имя пациента",
+    "trigger_words": ["имя пациента"],
+    "type_data": "str"
+  }
+
+
 
 Пул всех команд:
     {

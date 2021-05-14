@@ -16,7 +16,11 @@
     "id": "3",
     "trigger_words": ["заполнить","изменить"],
     "args": {
-      "parameter-name": "raw"
+      "data_to_fill":
+      {
+        "parameter-name": "str",
+        "data": "str"
+      }
     }
   },
   "what_left": {
