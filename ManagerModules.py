@@ -89,7 +89,7 @@ class ManagerModules(ParentClassForModules):
             # Получить информацию менеджере модулей
             self.info()
 
-    def start_module(self, trigger_word):
+    def start_module(self, trigger_word:str):
         """Запуск модуля по его имени"""
         name_module = self.check_name(trigger_word)
         if name_module:
@@ -140,7 +140,7 @@ class ManagerModules(ParentClassForModules):
         """Проверка входящего имени команды на корректность"""
         trigger_word = ' '.join(trigger_word)
         for name, structure in self.modules.items():
-            if any(trigger_word in x for x in structure['trigger_name']):
+            if any(trigger_word.lower() in x for x in structure['trigger_name']):
                 return name
         else:
             return False

@@ -10,3 +10,4 @@ class TextToSpeechModule():
     def say(self, msg: str):
         self.engine.say(msg)
         self.engine.runAndWait()
+        print(msg)

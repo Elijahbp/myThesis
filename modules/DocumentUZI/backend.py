@@ -161,9 +161,8 @@ class ResearchSession():
                         # если число слов >= числу в слов в команде, тогда берем её
                         if min_count_word_command <= count_word_input_data:
                             structure[key] = triggered_words
-                # if len(structure.keys()) == 1:
-                # TODO Надо следлать проверку на коректность тригерных слов
-                #    break
+                if len(structure.keys()) == 1:
+                     break
             elif structure:
                 # Если слова тригеры уже имеются - проводим проверку через них
                     if count_word <= max_count_word_command:
