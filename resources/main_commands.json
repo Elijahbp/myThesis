@@ -1,5 +1,5 @@
 {
-  "сommands_main": {
+  "сommands_core": {
     "exit":{
       "id": "1",
       "args": {},

@@ -1,4 +1,4 @@
-def get_count_word( list_words: list, type_operation: str):
+def get_count_word(list_words: list, type_operation: str):
     count_words = 0
     if type_operation == 'max':
         max_count_word = 0

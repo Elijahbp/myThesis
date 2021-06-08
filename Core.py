@@ -26,7 +26,7 @@ class Core(ParentClassForModules):
         """Загрузка команд ядра и менеджера"""
         with open('resources/main_commands.json', encoding='utf-8') as main_commands:
             loaded_json = json.load(main_commands)
-            self.commands = loaded_json['сommands_main']
+            self.commands = loaded_json['сommands_core']
             main_commands.close()
 
     def run(self):
