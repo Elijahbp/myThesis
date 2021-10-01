@@ -4,10 +4,14 @@
     "id":"n",
     "trigger_words": ["cлово/сочетание"]
     "args":{
-        "arg_name":"тип данных",
-        "arg_name":{
+        "arg_name_1":{
+            "type_data":"int/float/str/bool/raw",
+            "count_input_data":"k"
+        }
+        "arg_name_2":{
             "parameter_name":"str",
-            "data":["raw"]
+            "type_data":"int/float/str/bool/raw",
+            "count_input_data":"k"
         }
     }
 }

@@ -98,7 +98,7 @@ class ResearchSession():
         if platform.system() == 'Windows':
             os.startfile(dst_path)
         elif platform.system() == 'Darwin':
-            subprocess.call(['open ', dst_path])
+            subprocess.call(['open', dst_path])
         time.sleep(5)  # Ожидание, пока программа запускается
         while True:
             try:

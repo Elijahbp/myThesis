@@ -26,7 +26,6 @@ class ParentClassForModules():
     def load_commands(self):
         pass
 
-
     def analyze_command_and_run(self, input_data: str):
         parse_data = self.get_structure_input_data(input_data=input_data)
         if not parse_data:
@@ -128,9 +127,6 @@ class ParentClassForModules():
                     parsed_data['sets'][str(i)]['data'] = input_data[count_word:]
 
         return parsed_data
-
-
-
 
     @abstractmethod
     def start(self):
